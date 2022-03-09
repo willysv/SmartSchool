@@ -1,15 +1,50 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Pressable, ImageBackground, Image } from 'react-native';
+import { Text, View, StyleSheet, Pressable, ImageBackground, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { TextInput } from "react-native-gesture-handler";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CheckBox from '@react-native-community/checkbox';
+import Http from 'smartstudent/src/libs/http';
 
 class LoginScreen extends Component {
 
-    showMessage() {
-        console.log("Presionando boton");
+    state = {
+        user:"",
+        pass:"",
+        check1:true
+    }
+
+    componentDidMount = async () => {
+        const token = await AsyncStorage.getItem("token");
+        if (token !==null) {
+            this.props.navigation.navigate('ListStudenStack');
+        }
+    }
+
+    constructor(props) {
+        super(props);
+        this.state={check1:true};
+    }
+
+    login = async () => {
+        const form = new FormData();
+        form.append("login",this.state.user);
+        form.append("password",this.state.pass);
+        const res = await Http.instance.post(`${Http.URL}login.php`,form);
+        if (res.status=="success") {
+            console.log("respuesta",res);
+            await AsyncStorage.setItem("token",res.authtoken);
+            await AsyncStorage.setItem("mobile",this.state.user);
+            this.props.navigation.navigate('ListStudent');
+        } else {
+            console.log("respuesta",res);
+            alert(res.reason);
+        }
     }
 
     render() {
         return (
+            <ScrollView style={{flex:1, backgroundColor:"#000"}} ref="scroll" contentContainerStyle={{flexGrow:1}}>
+            <KeyboardAvoidingView behavior="position" style={{flex:1,backgroundColor:"#0FF"}} contentContainerStyle={{flexGrow:1}}>
             <View style={style.container}>
                  <ImageBackground source={require('smartstudent/src/assets/background.png')} resizeMode="cover" style={style.image}>
                      <View style={style.logoContainer}>
@@ -21,32 +56,64 @@ class LoginScreen extends Component {
                     <View style={style.groupData}>
                         <View style={style.sectionStyle}>
                             <Image
-                                source={{
-                                uri:
-                                    'https://raw.githubusercontent.com/AboutReact/sampleresource/master/input_username.png',
-                                }}
+                                source={require('smartstudent/src/assets/iconuser.png')}
                                 style={style.imageStyle}
                             />
+                            <View style={style.separator}>
+
+                            </View>
                             <TextInput
-                                style={{flex: 1}}
+                                style={style.txtStyle}
                                 placeholder="Username"
+                                placeholderTextColor="#FFF"
                                 underlineColorAndroid="transparent"
+                                onChangeText={(user) => this.setState({user})}
                             />
                         </View>
-                        <View style={style.textInput}>
+                        <View style={style.sectionStyle}>
+                            <Image
+                                source={require('smartstudent/src/assets/iconpass.png')}
+                                style={style.imageStyle}
+                            />
+                            <View style={style.separator}>
+
+                            </View>
                             <TextInput
-                                placeholder="Contraseña"
+                                style={style.txtStyle}
+                                placeholder="Password"
+                                placeholderTextColor="#FFF"
+                                underlineColorAndroid="transparent"
                                 secureTextEntry={true}
+                                onChangeText={(pass) => this.setState({pass})}
                             />
                         </View>
-                        <Pressable onPress={()=>this.showMessage()}>
+                        <Pressable onPress={()=>this.login()}>
                             <View style={style.btnSesion}>
-                                <Text style={style.txtSession}>Entrar</Text>
+                                <Text style={style.txtSession}>Sign In</Text>
                             </View>
                         </Pressable>
+                        <View style={style.check1}>
+                            <CheckBox
+                                value={this.state.check1}
+                                hideBox={true}
+                                tintColors={{true:"#FFF", false:"black"}}
+                                onValueChange={(value) =>
+                                    this.setState({check1:value})
+                                }
+                            />
+                            <Text style={style.txtCheck}>Remember me</Text>
+                            <View style={style.separatorcheck}>
+
+                            </View>
+                            <Text style={style.txtCheck}>
+                                Forgot Password?
+                            </Text>
+                        </View>
                     </View>
                 </ImageBackground>
             </View>
+            </KeyboardAvoidingView>
+            </ScrollView>
         )
     }
 }
@@ -70,7 +137,7 @@ const style=StyleSheet.create({
         marginTop:20,
         marginLeft:30,
         marginRight:30,
-        backgroundColor:"#aabbcc",
+        backgroundColor:"#06154a",
         height:50,
         alignItems:"center",
         justifyContent:"center",
@@ -100,25 +167,54 @@ const style=StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(88, 159, 200, 0.1)',
-        borderWidth: 0.5,
+        backgroundColor: 'rgba(88, 159, 200, 0.4)',
+        borderWidth: 0,
         borderColor: '#000',
         height: 55,
         borderRadius: 50,
         marginLeft:30,
-        marginRight:30
+        marginRight:30,
+        marginBottom:20
       },
       imageStyle: {
         padding: 10,
-        margin: 5,
+        margin: 20,
         height: 25,
         width: 25,
         resizeMode: 'stretch',
         alignItems: 'center',
       },
+      txtStyle: {
+        flex:1,
+        color:"#fff",
+        fontSize:18
+      },
       groupData: {
           flex:1,
-          justifyContent:"flex-end"
+          justifyContent:"flex-end",
+          marginBottom:60
+      },
+      separator: {
+        borderWidth: 0.7,
+        borderColor: '#FFF',
+        height:35,
+        marginRight:10
+      },
+      check1: {
+          flexDirection:"row",
+          alignItems:"center",
+          marginTop:20,
+          justifyContent:"center"
+      },
+      txtCheck: {
+          color:"#fff"
+      },
+      separatorcheck: {
+        borderWidth: 0.7,
+        borderColor: '#FFF',
+        height:35,
+        marginRight:10,
+        marginLeft:10
       }
 });
 
