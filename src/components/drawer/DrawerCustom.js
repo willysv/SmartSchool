@@ -4,6 +4,7 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
     useTheme,
@@ -21,6 +22,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function DrawerContent(props) {
+
+    closeSesion = async () => {
+        await AsyncStorage.removeItem("token");
+        props.navigation.navigate('LoginStack');
+    }
+
     openLink = async (url)=> {
         const supported = await Linking.canOpenURL(url);
         if (supported) {
@@ -36,11 +43,11 @@ export function DrawerContent(props) {
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
-                        <View style={{flexDirection:'column',marginTop: 40, marginBottom:40, alignItems:"center", marginRight:10}}>
+                        <View style={{flexDirection:'column',marginTop: 0, marginBottom:20, alignItems:"flex-end", marginRight:0}}>
                             <Pressable onPress={()=>props.navigation.navigate('Home')}>
                             <Image 
-                                source={require("smartstudent/src/assets/avatar.png")}
-                                size={50}
+                                style={styles.imgMenu}
+                                source={require("smartstudent/src/assets/logomenu.png")}
                             />
                             </Pressable>
                         </View>
@@ -50,10 +57,59 @@ export function DrawerContent(props) {
                         <DrawerItem 
                             labelStyle={styles.itemMenu}
                             icon={({color, size}) => (
-                                <Icon style={styles.searchIcon} name="info-circle" size={20} color={color}/>
+                                <Image
+                                    style={styles.iconImage}
+                                    source={require("smartstudent/src/assets/iconlist.png")}
+                                />
                             )}
-                            label="Información General"
+                            label="List"
+                            onPress={() => {props.navigation.navigate('ListStudenStack')}}
+                        />
+                        <DrawerItem 
+                            labelStyle={styles.itemMenu}
+                            icon={({color, size}) => (
+                                <Image
+                                    style={styles.iconImage}
+                                    source={require("smartstudent/src/assets/iconstudent.png")}
+                                />
+                            )}
+                            label="Student"
                             onPress={() => {props.navigation.navigate('InfoGen')}}
+                        />
+                        <DrawerItem 
+                            labelStyle={styles.itemMenu}
+                            icon={({color, size}) => (
+                                <Image
+                                    style={styles.iconImage}
+                                    source={require("smartstudent/src/assets/iconschool.png")}
+                                />
+                            )}
+                            label="School"
+                            onPress={() => {props.navigation.navigate('InfoGen')}}
+                        />
+                        <DrawerItem 
+                            labelStyle={styles.itemMenu}
+                            icon={({color, size}) => (
+                                <Image
+                                    style={styles.iconImage}
+                                    source={require("smartstudent/src/assets/iconpassmenu.png")}
+                                />
+                            )}
+                            label="Password"
+                            onPress={() => {props.navigation.navigate('InfoGen')}}
+                        />
+                        <DrawerItem 
+                            labelStyle={styles.itemMenu}
+                            icon={({color, size}) => (
+                                <Image
+                                    style={styles.iconImage}
+                                    source={require("smartstudent/src/assets/iconlogout.png")}
+                                />
+                            )}
+                            label="Log Out"
+                            onPress={() => {
+                                this.closeSesion();
+                            }}
                         />
                     </Drawer.Section>
                 </View>
@@ -76,6 +132,11 @@ const styles = StyleSheet.create({
     contactIcon: {
         borderBottomColor:"#CCC",
         borderBottomWidth:1
+    },
+    iconImage: {
+        width: 40,
+        height:40,
+        resizeMode: 'stretch'
     },
     drawerContent: {
       flex: 1,
@@ -122,6 +183,13 @@ const styles = StyleSheet.create({
     },
     itemMenu: {
         fontSize:16
+    },
+    imgMenu: {
+        width: 280,
+        marginLeft:-11,
+        marginTop:-10,
+        height:200,
+        resizeMode: 'stretch'
     }
   });
 //export default DrawerCustom;

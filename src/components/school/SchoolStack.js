@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 const SchoolStack = () => {
     return (
         <Stack.Navigator
-            headerMode="none"
+            screenOptions={{headerShown:false}}
         >
             <Stack.Screen
                 name="LoginScren"

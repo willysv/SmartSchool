@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import ListStudentScreen from 'smartstudent/src/components/school/ListStudentScreen';
+import DashboardScreen from 'smartstudent/src/components/dashboard/DashboardScreen';
 import NavigationDrawerStructure from 'smartstudent/src/components/drawer/NavigationDrawerStructure';
 const Stack = createStackNavigator();
 
-const ListStudentStack = ({navigation}) => {
+const DashboardStack = ({navigation}) => {
     return (
         <Stack.Navigator
 
@@ -13,7 +13,7 @@ const ListStudentStack = ({navigation}) => {
                 name="infogen"
                 options={{
                         
-                        title: 'iSKOOL Parent', //Set Header Title
+                        title: 'Dashboard', //Set Header Title
                         headerLeft: ()=>
                         <NavigationDrawerStructure
                             navigationProps={navigation}
@@ -27,10 +27,10 @@ const ListStudentStack = ({navigation}) => {
                         }
                     }
                 }
-                component={ListStudentScreen}
+                component={DashboardScreen}
             />
         </Stack.Navigator>
     );
 }
 
-export default ListStudentStack;
+export default DashboardStack;

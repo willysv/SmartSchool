@@ -18,14 +18,15 @@ class ListStudentScreen extends Component {
         const mobile = await AsyncStorage.getItem("mobile");
         //await AsyncStorage.removeItem("token");
         if (token==null) {
-            this.props.navigation.navigate('LoginScren');
+            this.props.navigation.navigate('LoginStack');
         }
         this.setState({token,mobile});
         const form = new FormData();
         form.append("authtoken",this.state.token);
         form.append("mobile",this.state.mobile);
         const res = await Http.instance.post(`${Http.URL}getstudents.php`,form);
-        console.log("Datos:", res.rows);
+        console.log("Datos:", res);
+        console.log("Toekn:", token);
         if (res.status=="success") {
             this.setState({data:res.rows});
         }
@@ -57,6 +58,11 @@ class ListStudentScreen extends Component {
         }
     }
 
+    showDasboard = async (sid) => {
+        await AsyncStorage.setItem("sid",sid);
+        this.props.navigation.navigate('DashboardStack');
+    }
+
     render() {
         return (
             <View style={style.container}>
@@ -64,10 +70,12 @@ class ListStudentScreen extends Component {
                     itemDimension={100}
                     data={this.state.data}
                     renderItem={ ({item})=>
-                        <View style={style.listaItem}>
-                            {this.displayImage(item)}
-                            <Text style={style.tituloText}>{item.full_name}</Text>
-                        </View>
+                        <Pressable onPress={()=>this.showDasboard(item.sid)}>
+                            <View style={style.listaItem}>
+                                {this.displayImage(item)}
+                                <Text style={style.tituloText}>{item.full_name}</Text>
+                            </View>
+                        </Pressable>
                     }
                 />
             </View>
@@ -78,7 +86,8 @@ class ListStudentScreen extends Component {
 const style=StyleSheet.create({
     container: {
         flex:1,
-        backgroundColor:"#FFF"
+        backgroundColor:"#FFF",
+        paddingTop:30
     },
     avatar: {
         height: 75,

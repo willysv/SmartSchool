@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Pressable, ImageBackground, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, ScrollView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
@@ -34,7 +35,7 @@ class LoginScreen extends Component {
             console.log("respuesta",res);
             await AsyncStorage.setItem("token",res.authtoken);
             await AsyncStorage.setItem("mobile",this.state.user);
-            this.props.navigation.navigate('ListStudent');
+            this.props.navigation.navigate('ListStudenStack');
         } else {
             console.log("respuesta",res);
             alert(res.reason);
@@ -43,10 +44,14 @@ class LoginScreen extends Component {
 
     render() {
         return (
-            <ScrollView style={{flex:1, backgroundColor:"#000"}} ref="scroll" contentContainerStyle={{flexGrow:1}}>
-            <KeyboardAvoidingView behavior="position" style={{flex:1,backgroundColor:"#0FF"}} contentContainerStyle={{flexGrow:1}}>
-            <View style={style.container}>
+            <KeyboardAwareScrollView 
+                    style={{backgroundColor:'#F6F7FB'}}
+                    resetScrollToCoords={{x:0, y:0}}
+                    contentContainerStyle={style.container}
+                    scrollEnabled={false}
+                >
                  <ImageBackground source={require('smartstudent/src/assets/background.png')} resizeMode="cover" style={style.image}>
+
                      <View style={style.logoContainer}>
                         <Image
                             style={style.logo}
@@ -87,11 +92,11 @@ class LoginScreen extends Component {
                                 onChangeText={(pass) => this.setState({pass})}
                             />
                         </View>
-                        <Pressable onPress={()=>this.login()}>
+                        <TouchableHighlight onPress={()=>this.login()}>
                             <View style={style.btnSesion}>
                                 <Text style={style.txtSession}>Sign In</Text>
                             </View>
-                        </Pressable>
+                        </TouchableHighlight>
                         <View style={style.check1}>
                             <CheckBox
                                 value={this.state.check1}
@@ -111,9 +116,7 @@ class LoginScreen extends Component {
                         </View>
                     </View>
                 </ImageBackground>
-            </View>
-            </KeyboardAvoidingView>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         )
     }
 }
@@ -159,9 +162,10 @@ const style=StyleSheet.create({
     },
     logoContainer: {
         justifyContent:"center",
-        flex:0,
+        flex:1,
         flexDirection:"row",
-        marginTop:250
+        alignItems:"center"
+//        marginTop:250
     },
     sectionStyle: {
         flexDirection: 'row',
@@ -192,7 +196,8 @@ const style=StyleSheet.create({
       groupData: {
           flex:1,
           justifyContent:"flex-end",
-          marginBottom:60
+          marginBottom:60,
+          marginTop:-100
       },
       separator: {
         borderWidth: 0.7,
