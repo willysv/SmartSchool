@@ -85,7 +85,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="School"
-                            onPress={() => {props.navigation.navigate('InfoGen')}}
+                            onPress={() => {props.navigation.navigate('SchoolViewStack')}}
                         />
                         <DrawerItem 
                             labelStyle={styles.itemMenu}

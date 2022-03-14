@@ -1,9 +1,10 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import SchoolStack from 'smartstudent/src/components/school/SchoolStack'
-import ListStudentStack from 'smartstudent/src/components/school/ListStudentStack'
-import DashboardStack from 'smartstudent/src/components/dashboard/DashboardStack'
+import SchoolStack from 'smartstudent/src/components/school/SchoolStack';
+import ListStudentStack from 'smartstudent/src/components/school/ListStudentStack';
+import DashboardStack from 'smartstudent/src/components/dashboard/DashboardStack';
+import SchoolViewStack from 'smartstudent/src/components/schoolview/SchoolViewStack';
 //import TestScreen from 'smartstudent/src/components/school/Test';
 import { DrawerContent } from 'smartstudent/src/components/drawer/DrawerCustom';
 const Drawer = createDrawerNavigator();
@@ -27,6 +28,10 @@ const App = () => {
         <Drawer.Screen
             options={{headerShown:false}}
             name="DashboardStack" component={DashboardStack}
+        />
+        <Drawer.Screen
+            options={{headerShown:false}}
+            name="SchoolViewStack" component={SchoolViewStack}
         />
       </Drawer.Navigator>
     </NavigationContainer>
