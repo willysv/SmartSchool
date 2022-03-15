@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Pressable, Image, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Image, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Http from 'smartstudent/src/libs/http';
+import iconMarker from 'smartstudent/src/assets/iconmapschool.png';
+
+let width=Dimensions.get('window').width;
+let height=Dimensions.get('window').height;
 
 class SchoolViewScreen extends Component {
 
@@ -30,7 +34,7 @@ class SchoolViewScreen extends Component {
         const res = await Http.instance.post(`${Http.URL}searchschool.php`,form);
         console.log("Datos:", res);
         if (res.status=="success") {
-            this.setState({data:res.rows});
+            this.setState({data:res.rows,latitud:parseFloat(res.rows[0].s_lat),longitud:parseFloat(res.rows[0].s_lon)});
         }
     }
 
@@ -72,8 +76,40 @@ class SchoolViewScreen extends Component {
                     {
                     this.displayImage()
                     }
+                    <View style={style.viewSchoolName}>
+                        <Text style={style.txtSchoolName}>{this.getData("s_name")}</Text>
+                    </View>
+                </View>
+                <View style={style.viewAddressSchool}>
                     <View>
-                        <Text>{this.getData("s_name")}</Text>
+                        <View style={{flexDirection:"row",width:((width-60)/2)}}>
+                            <Image
+                                style={style.iconI}
+                                source={require("smartstudent/src/assets/iconaddress.png")}
+                            />
+                            <Text style={style.txtDataAddress}>
+                                {this.getData("s_address")}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={style.separator}>
+
+                    </View>
+                    <View style={style.viewSchoolPhone}>
+                        <View style={{flexDirection:"row", alignItems:"center"}}>
+                            <Image
+                                style={style.iconI}
+                                source={require("smartstudent/src/assets/iconphone.png")}
+                            />
+                            <Text style={style.txtDataAddress}>{this.getData("s_mobile")}</Text>
+                        </View>
+                        <View style={{flexDirection:"row", alignItems:"center"}}>
+                            <Image
+                                style={style.iconI}
+                                source={require("smartstudent/src/assets/iconmail.png")}
+                            />
+                            <Text style={style.txtDataAddress}>{this.getData("s_email")}</Text>
+                        </View>
                     </View>
                 </View>
                 <MapView
@@ -86,43 +122,14 @@ class SchoolViewScreen extends Component {
                     }}
                     
                 >
+                    <MapView.Marker
+                            coordinate={{latitude: this.state.latitud,
+                            longitude: this.state.longitud}}
+                            title={this.getData("s_name")}
+                            description={""}
+                            image={iconMarker}
+                    />
                 </MapView>
-                <View style={style.listIcons}>
-                  <Image
-                        style={style.iconImage}
-                        source={require("smartstudent/src/assets/iconattendance.png")}
-                    />
-                    <Image
-                        style={style.iconImage1}
-                        source={require("smartstudent/src/assets/iconleave.png")}
-                    />
-                    <Image
-                        style={style.iconImage1}
-                        source={require("smartstudent/src/assets/iconholidays.png")}
-                    />
-                    <Image
-                        style={style.iconImage1}
-                        source={require("smartstudent/src/assets/iconmessage.png")}
-                    />
-                </View>
-                <View style={style.listIcons}>
-                  <Image
-                        style={style.iconImage2}
-                        source={require("smartstudent/src/assets/iconhomework.png")}
-                    />
-                    <Image
-                        style={style.iconImage3}
-                        source={require("smartstudent/src/assets/iconnews.png")}
-                    />
-                    <Image
-                        style={style.iconImage4}
-                        source={require("smartstudent/src/assets/iconevents.png")}
-                    />
-                    <Image
-                        style={style.iconImage5}
-                        source={require("smartstudent/src/assets/icontransport.png")}
-                    />
-                </View>
             </View>
         )
     }
@@ -132,82 +139,62 @@ const style=StyleSheet.create({
     container: {
         flex:1,
         backgroundColor:"#FFF",
-        padding:20
-    },
-    iconImage: {
-        width: 90,
-        height:75,
-        resizeMode: 'stretch'
-    },
-    iconImage1: {
-        width: 72,
-        height:80,
-        resizeMode: 'stretch'
-    },
-    iconImage2: {
-        width: 82,
-        height:80,
-        resizeMode: 'stretch'
-    },
-    iconImage3: {
-        width: 60,
-        height:80,
-        resizeMode: 'stretch',
-        marginLeft:10
-    },
-    iconImage4: {
-        width: 60,
-        height:74,
-        resizeMode: 'stretch',
-        marginLeft:15,
-        marginRight:-3
-    },
-    iconImage5: {
-        width: 78,
-        height:74,
-        resizeMode: 'stretch'
-    },
-    listIcons: {
-        flexDirection:"row",
-        justifyContent:"space-between"
+        padding:0
     },
     imgSchool: {
-        height: 200,
-        width: 350,
+        height: 225,
+        width: 375,
         resizeMode: 'stretch',
     },
     dataSchool: {
         flex:1,
         flexDirection:"row",
+        justifyContent:"center",
+        marginTop:10
+    },
+    viewSchoolName: {
+        position:"absolute",
+        bottom:0,
+        left:0,
+        flex:1,
+        height:60,
+        width:width,
+        backgroundColor:'rgba(0, 0, 0, 0.7)',
         justifyContent:"center"
     },
-    dataStudentColumn2: {
-        marginLeft:10
-    },
-    full_name: {
-        fontSize:16,
-        fontWeight:"bold",
-        color:"#000"
-    },
-    otherData: {
-        fontSize:12,
-        color:"#000"
-    },
-    iconbus: {
-        width: 70,
-        height:75,
-        resizeMode: 'stretch'
-    },
-    busContainer: {
-        flex:1,
-        flexDirection:"row",
-        justifyContent:"flex-end"
+    txtSchoolName: {
+        color:"#fff",
+        marginLeft:20,
+        fontWeight:"bold"
     },
     map: {
         flex:1,
-        marginLeft:-20,
-        marginRight:-20,
-        marginBottom:20
+        marginLeft:0,
+        marginRight:0,
+        marginBottom:0
+    },
+    viewAddressSchool: {
+        backgroundColor:"#1F70AE",
+        flexDirection:"row",
+        paddingLeft:10,
+        paddingRight:10,
+        paddingTop:30,
+        paddingBottom:30
+    },
+    viewSchoolPhone: {
+        flex:1,
+        marginLeft:10,
+        width:(width-10)/2
+    },
+    txtDataAddress: {
+        color:"#fff",
+        fontWeight:"bold",
+        fontSize:14
+    },
+    separator: {
+      borderWidth: 0.5,
+      borderColor: '#FFF',
+      marginLeft:10
     }
 });
 

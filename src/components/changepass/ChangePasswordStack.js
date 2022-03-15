@@ -1,19 +1,19 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import DashboardScreen from 'smartstudent/src/components/dashboard/DashboardScreen';
+import ChangePasswordScreen from 'smartstudent/src/components/changepass/ChangePasswordScreen';
 import NavigationDrawerStructure from 'smartstudent/src/components/drawer/NavigationDrawerStructure';
 const Stack = createStackNavigator();
 
-const DashboardStack = ({navigation}) => {
+const ChangePasswordStack = ({navigation}) => {
     return (
         <Stack.Navigator
 
         >
             <Stack.Screen
-                name="dashboardscreenview"
+                name="changepassview"
                 options={{
                         
-                        title: 'Dashboard', //Set Header Title
+                        title: 'Change Password', //Set Header Title
                         headerLeft: ()=>
                         <NavigationDrawerStructure
                             navigationProps={navigation}
@@ -27,10 +27,10 @@ const DashboardStack = ({navigation}) => {
                         }
                     }
                 }
-                component={DashboardScreen}
+                component={ChangePasswordScreen}
             />
         </Stack.Navigator>
     );
 }
 
-export default DashboardStack;
+export default ChangePasswordStack;

@@ -5,6 +5,8 @@ import SchoolStack from 'smartstudent/src/components/school/SchoolStack';
 import ListStudentStack from 'smartstudent/src/components/school/ListStudentStack';
 import DashboardStack from 'smartstudent/src/components/dashboard/DashboardStack';
 import SchoolViewStack from 'smartstudent/src/components/schoolview/SchoolViewStack';
+import EventsStack from 'smartstudent/src/components/events/EventsStack';
+import ChangePasswordStack from 'smartstudent/src/components/changepass/ChangePasswordStack';
 //import TestScreen from 'smartstudent/src/components/school/Test';
 import { DrawerContent } from 'smartstudent/src/components/drawer/DrawerCustom';
 const Drawer = createDrawerNavigator();
@@ -32,6 +34,14 @@ const App = () => {
         <Drawer.Screen
             options={{headerShown:false}}
             name="SchoolViewStack" component={SchoolViewStack}
+        />
+        <Drawer.Screen
+            options={{headerShown:false}}
+            name="ChangePasswordStack" component={ChangePasswordStack}
+        />
+        <Drawer.Screen
+            options={{headerShown:false}}
+            name="EventsStack" component={EventsStack}
         />
       </Drawer.Navigator>
     </NavigationContainer>

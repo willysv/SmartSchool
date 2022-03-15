@@ -74,7 +74,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Student"
-                            onPress={() => {props.navigation.navigate('InfoGen')}}
+                            onPress={() => {props.navigation.navigate('DashboardStack')}}
                         />
                         <DrawerItem 
                             labelStyle={styles.itemMenu}
@@ -96,7 +96,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Password"
-                            onPress={() => {props.navigation.navigate('InfoGen')}}
+                            onPress={() => {props.navigation.navigate('ChangePasswordStack')}}
                         />
                         <DrawerItem 
                             labelStyle={styles.itemMenu}

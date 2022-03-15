@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Pressable, Image, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Image, FlatList, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Http from 'smartstudent/src/libs/http';
+import { FlatGrid } from "react-native-super-grid";
 
 class DashboardScreen extends Component {
 
@@ -10,11 +11,18 @@ class DashboardScreen extends Component {
         token:"",
         sid:"",
         data:[],
+        dataGuardian:[],
         latitud:23.165496,
         longitud: 79.953592
     }
 
     componentDidMount = async () => {
+        const unsubscribe = this.props.navigation.addListener('focus', () => {
+            this.loadData();
+        });
+    }
+
+    loadData = async () => {
         const token = await AsyncStorage.getItem("token");
         const sid = await AsyncStorage.getItem("sid");
         //await AsyncStorage.removeItem("token");
@@ -30,11 +38,12 @@ class DashboardScreen extends Component {
         console.log("Toekn:", token);
         if (res.status=="success") {
             this.setState({data:res.rows});
+            await AsyncStorage.setItem("this_sch",res.rows[0].this_sch);
         }
-    }
-
-    constructor(props) {
-        super(props);
+        const resGuardian = await Http.instance.post(`${Http.URL}searchguardiannew.php`,form);
+        if (res.status=="success") {
+            this.setState({dataGuardian:resGuardian.rows});
+        }
     }
 
     displayImage() {
@@ -61,10 +70,42 @@ class DashboardScreen extends Component {
         }
     }
 
+    displayImage2(item) {
+        if ((item.f_pic!="") && (item.f_pic!=null)) {
+            return (
+                <View>
+                    <Image
+                        source={{uri:`${Http.URL}${item.f_pic}`}}
+                        style={style.avatar}
+                    />
+                    <Image
+                            source={require('smartstudent/src/assets/circle.png')}
+                            style={style.circle}
+                        />
+                </View>);
+        } else {
+            return (<Image
+                source={require('smartstudent/src/assets/avatar.png')}
+                style={style.avatar1}
+            />);
+        }
+    }
+
     getData(value) {
         item=this.state.data[0];
         if (typeof(item)!="undefined") {
             return item[value];
+        }
+    }
+
+    doAction(option) {
+        switch (option) {
+            case 7:
+                this.props.navigation.navigate('EventsStack');
+                break;
+        
+            default:
+                break;
         }
     }
 
@@ -91,9 +132,18 @@ class DashboardScreen extends Component {
                     </View>
                 </View>
                 <View>
-                        <Image
-                                source={require("smartstudent/src/assets/carruselphoto.png")}
-                            />
+                    <FlatGrid
+                        itemDimension={100}
+                        data={this.state.dataGuardian}
+                        
+                        itemContainerStyle={{flex:1,alignItems:"center"}}
+                        renderItem={ ({item})=>
+                            <View style={style.listaItem}>
+                                {this.displayImage2(item)}
+                                <Text style={style.tituloText}>{item.g_name}</Text>
+                            </View>
+                        }
+                    />
                 </View>
                 <MapView
                     style={style.map}
@@ -133,10 +183,12 @@ class DashboardScreen extends Component {
                         style={style.iconImage3}
                         source={require("smartstudent/src/assets/iconnews.png")}
                     />
-                    <Image
-                        style={style.iconImage4}
-                        source={require("smartstudent/src/assets/iconevents.png")}
-                    />
+                    <TouchableHighlight onPress={()=>this.doAction(7)}>
+                        <Image
+                            style={style.iconImage4}
+                            source={require("smartstudent/src/assets/iconevents.png")}
+                        />
+                    </TouchableHighlight>
                     <Image
                         style={style.iconImage5}
                         source={require("smartstudent/src/assets/icontransport.png")}
@@ -198,6 +250,13 @@ const style=StyleSheet.create({
         borderRadius:75,
         overflow:"hidden"
     },
+    avatar1: {
+        height: 75,
+        width: 75,
+        resizeMode: 'cover',
+        alignItems: 'center',
+        overflow:"hidden"
+    },
     circle: {
         height: 15,
         width: 15,
@@ -237,6 +296,14 @@ const style=StyleSheet.create({
         marginLeft:-20,
         marginRight:-20,
         marginBottom:20
+    },
+    tituloText: {
+        fontSize:12,
+        color:"#000",
+        fontWeight:"bold"
+    },
+    listaItem: {
+        alignItems:"center" 
     }
 });
 

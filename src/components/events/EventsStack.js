@@ -1,19 +1,19 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import DashboardScreen from 'smartstudent/src/components/dashboard/DashboardScreen';
+import EventsScreen from 'smartstudent/src/components/events/EventsScreen';
 import NavigationDrawerStructure from 'smartstudent/src/components/drawer/NavigationDrawerStructure';
 const Stack = createStackNavigator();
 
-const DashboardStack = ({navigation}) => {
+const EventsStack = ({navigation}) => {
     return (
         <Stack.Navigator
 
         >
             <Stack.Screen
-                name="dashboardscreenview"
+                name="eventslistview"
                 options={{
                         
-                        title: 'Dashboard', //Set Header Title
+                        title: 'Events', //Set Header Title
                         headerLeft: ()=>
                         <NavigationDrawerStructure
                             navigationProps={navigation}
@@ -27,10 +27,10 @@ const DashboardStack = ({navigation}) => {
                         }
                     }
                 }
-                component={DashboardScreen}
+                component={EventsScreen}
             />
         </Stack.Navigator>
     );
 }
 
-export default DashboardStack;
+export default EventsStack;
