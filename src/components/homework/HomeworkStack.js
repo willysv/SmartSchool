@@ -1,20 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import EventsScreen from 'smartstudent/src/components/events/EventsScreen';
-import EventDetailScreen from 'smartstudent/src/components/events/EventDetailScreen';
+import HomeworkScreen from 'smartstudent/src/components/homework/HomeworkScreen';
+import HomeworkDetailScreen from 'smartstudent/src/components/homework/HomeworkDetailScreen';
 import NavigationDrawerStructure from 'smartstudent/src/components/drawer/NavigationDrawerStructure';
 const Stack = createStackNavigator();
 
-const EventsStack = ({navigation}) => {
+const HomeworkStack = ({navigation}) => {
     return (
         <Stack.Navigator
 
         >
             <Stack.Screen
-                name="eventslistview"
+                name="homeworklistview"
                 options={{
                         
-                        title: 'Events', //Set Header Title
+                        title: 'Homework', //Set Header Title
                         headerLeft: ()=>
                         <NavigationDrawerStructure
                             navigationProps={navigation}
@@ -28,13 +28,13 @@ const EventsStack = ({navigation}) => {
                         }
                     }
                 }
-                component={EventsScreen}
+                component={HomeworkScreen}
             />
             <Stack.Screen
-                name="eventsdetailview"
+                name="homeworkdetailview"
                 options={{
                         
-                        title: 'Events', //Set Header Title
+                        title: 'Homework', //Set Header Title
                         headerLeft: ()=>
                         <NavigationDrawerStructure
                             navigationProps={navigation}
@@ -48,10 +48,10 @@ const EventsStack = ({navigation}) => {
                         }
                     }
                 }
-                component={EventDetailScreen}
+                component={HomeworkDetailScreen}
             />
         </Stack.Navigator>
     );
 }
 
-export default EventsStack;
+export default HomeworkStack;

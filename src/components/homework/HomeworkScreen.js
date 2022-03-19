@@ -1,17 +1,19 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, TextInput, TouchableHighlight, FlatList} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableHighlight, FlatList, Linking, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import Http from 'smartstudent/src/libs/http';
 
-class EventsScreen extends Component {
+class HomeworkScreen extends Component {
 
     state = {
         token:"",
         sid:"",
         data:[],
-        dataEvent:[],
-        this_sch:""
+        dataHomework:[],
+        this_sch:"",
+        standard:"",
+        section:""
     }
 
     componentDidMount = async () => {
@@ -24,11 +26,13 @@ class EventsScreen extends Component {
         const token = await AsyncStorage.getItem("token");
         const sid = await AsyncStorage.getItem("sid");
         const this_sch = await AsyncStorage.getItem("this_sch");
+        const standard = await AsyncStorage.getItem("standard");
+        const section = await AsyncStorage.getItem("section");
         //await AsyncStorage.removeItem("token");
         if (token==null) {
             this.props.navigation.navigate('LoginStack');
         }
-        this.setState({token,sid,this_sch});
+        this.setState({token,sid,this_sch, standard, section});
         const form = new FormData();
         form.append("authtoken",this.state.token);
         form.append("sid",this.state.sid);
@@ -36,12 +40,15 @@ class EventsScreen extends Component {
         if (res.status=="success") {
             this.setState({data:res.rows});
         }
-        const formEvent = new FormData();
-        formEvent.append("authtoken",this.state.token);
-        formEvent.append("this_sch",this_sch);
-        const resEvent = await Http.instance.post(`${Http.URL}searchevents.php`,formEvent);
-        if (resEvent.status=="success") {
-            this.setState({dataEvent:resEvent.rows});
+        const formHomework = new FormData();
+        formHomework.append("authtoken",token);
+        formHomework.append("this_sch",this_sch);
+        formHomework.append("standard",standard);
+        formHomework.append("section",section);
+        const resHomework = await Http.instance.post(`${Http.URL}searchhomework.php`,formHomework);
+        console.log(resHomework);
+        if (resHomework.status=="success") {
+            this.setState({dataHomework:resHomework.rows});
         }
     }
 
@@ -91,6 +98,32 @@ class EventsScreen extends Component {
         }
     }
 
+    openLink = async (url)=> {
+        const supported = await Linking.canOpenURL(url);
+        if (supported) {
+            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+            // by some browser in the mobile
+            await Linking.openURL(url);
+        } else {
+            Alert.alert(`Don't know how to open this URL: ${url}`);
+        }
+    }
+
+    getAttach(item,value) {
+        if ((item[value]!="") && (item[value]!=null)) {
+            return (
+                <Pressable onPress={()=>this.openLink(`${Http.URL}${item[value]}`)}>
+                    <View>
+                        <Image
+                            source={require('smartstudent/src/assets/attach.png')}
+                            style={style.attach}
+                        /> 
+                    </View>
+                </Pressable>
+            );
+        }
+    }
+
     getData(value) {
         item=this.state.data[0];
         if (typeof(item)!="undefined") {
@@ -98,20 +131,19 @@ class EventsScreen extends Component {
         }
     }
 
-    getDate(item) {
-        const dateToFormat = moment(item.datetime).format("MM-DD-YYYY hh:mm");
+    getDate(item,title) {
+        const dateToFormat = moment(item).format("MM-DD-YYYY hh:mm");
         return (
-            <View style={{flex:1, flexDirection:"row",justifyContent:"flex-end"}}>
-            <Text>
-                {dateToFormat}
-            </Text>
+            <View>
+                <Text>{title}{dateToFormat}</Text>
             </View>
         );
     }
 
-    async viewEvent(id,item) {
-        await AsyncStorage.setItem("evid",id);
-        this.props.navigation.navigate('EventsStack',{screen:"eventsdetailview",params:{item}});
+    async viewHomework(id,item) {
+        console.log("clic");
+        await AsyncStorage.setItem("assid",id);
+        this.props.navigation.navigate('HomeworkStack',{screen:"homeworkdetailview",params:{item}});
     }
 
     render() {
@@ -137,21 +169,28 @@ class EventsScreen extends Component {
                     </View>
                 </View>
                 <FlatList 
-                    data={this.state.dataEvent}
+                    data={this.state.dataHomework}
                     renderItem = {
                         ({item}) => 
                             <View style={{marginBottom:10}}>
-                                {this.displayImage1(item)}
                                 <View style={{flexDirection:"row"}}>
-                                    <Text>{item.heading}</Text>
-                                    {this.getDate(item)}
+                                    {this.getDate(item.given_on,"Given on:")}
                                 </View>
+                                <Text>{item.assignment}</Text>
+                                <Text>Given by: {item.given_by}</Text>
+                                <Text>Subject: {item.subject}</Text>
+                                <Text>{item.assignment}</Text>
+                                {this.getDate(item.submission_dt,"Submission date:")}
                                 <View style={{flexDirection:"row"}}>
-                                    <Text>{item.matter}</Text>
+                                    {this.getAttach(item,"attach1")}
+                                    {this.getAttach(item,"attach2")}
+                                    {this.getAttach(item,"attach3")}
+                                    {this.getAttach(item,"attach4")}
+                                    {this.getAttach(item,"attach5")}
                                     <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end"}}>
-                                        <TouchableHighlight onPress={()=>this.viewEvent(item.evid,item)}>
+                                        <TouchableHighlight onPress={()=>this.viewHomework(item.assid,item)}>
                                             <View style={style.btnSesion}>
-                                                <Text style={style.txtSession}>Read more</Text>
+                                                <Text style={style.txtSession}>View Details</Text>
                                             </View>
                                         </TouchableHighlight>
                                     </View>
@@ -233,7 +272,11 @@ const style=StyleSheet.create({
         color:"#fff",
         fontSize:12,
         fontWeight:"bold"
+    },
+    attach: {
+        width:45,
+        height:45
     }
 });
 
-export default EventsScreen;
+export default HomeworkScreen;

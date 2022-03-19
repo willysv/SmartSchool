@@ -4,13 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import Http from 'smartstudent/src/libs/http';
 
-class EventsScreen extends Component {
+class EventDetailScreen extends Component {
 
     state = {
         token:"",
         sid:"",
         data:[],
-        dataEvent:[],
+        dataEvent:{},
         this_sch:""
     }
 
@@ -36,16 +36,11 @@ class EventsScreen extends Component {
         if (res.status=="success") {
             this.setState({data:res.rows});
         }
-        const formEvent = new FormData();
-        formEvent.append("authtoken",this.state.token);
-        formEvent.append("this_sch",this_sch);
-        const resEvent = await Http.instance.post(`${Http.URL}searchevents.php`,formEvent);
-        if (resEvent.status=="success") {
-            this.setState({dataEvent:resEvent.rows});
-        }
+        this.setState({dataEvent:this.props.route.params.item});
     }
 
     displayImage1(item) {
+        console.log(item.pic1);
         if ((item.pic1!="") && (item.pic1!=null)) {
             return (
                 <View>
@@ -98,20 +93,30 @@ class EventsScreen extends Component {
         }
     }
 
-    getDate(item) {
-        const dateToFormat = moment(item.datetime).format("MM-DD-YYYY hh:mm");
-        return (
-            <View style={{flex:1, flexDirection:"row",justifyContent:"flex-end"}}>
-            <Text>
-                {dateToFormat}
-            </Text>
-            </View>
-        );
+    getData1(value) {
+        item=this.state.dataEvent;
+        if (typeof(item[value])!="undefined") {
+            return item[value];
+        }
     }
 
-    async viewEvent(id,item) {
-        await AsyncStorage.setItem("evid",id);
-        this.props.navigation.navigate('EventsStack',{screen:"eventsdetailview",params:{item}});
+    getDate() {
+        const item=this.state.dataEvent;
+        if (typeof(item["datetime"])!="undefined") {
+            const dateToFormat = moment(item.datetime).format("MM-DD-YYYY hh:mm");
+            return (
+                <View style={{flex:1, flexDirection:"row",justifyContent:"flex-end"}}>
+                    <Text>
+                        {dateToFormat}
+                    </Text>
+                </View>
+            );
+        }
+    }
+
+    backEevent() {
+        console.log("click");
+        this.props.navigation.popToTop();
     }
 
     render() {
@@ -127,7 +132,7 @@ class EventsScreen extends Component {
                         <Text style={style.full_name}>{this.getData("full_name")}</Text>
                         <Text style={style.otherData}>Class: {this.getData("standard")}</Text>
                         <Text style={style.otherData}>Roll No: {this.getData("roll_no")}</Text>
-                        <Text style={style.otherData}>ID: 000</Text>
+                        <Text style={style.otherDatsa}>ID: 000</Text>
                     </View>
                     <View style={style.busContainer}>
                         <Image
@@ -136,30 +141,21 @@ class EventsScreen extends Component {
                         />
                     </View>
                 </View>
-                <FlatList 
-                    data={this.state.dataEvent}
-                    renderItem = {
-                        ({item}) => 
-                            <View style={{marginBottom:10}}>
-                                {this.displayImage1(item)}
-                                <View style={{flexDirection:"row"}}>
-                                    <Text>{item.heading}</Text>
-                                    {this.getDate(item)}
-                                </View>
-                                <View style={{flexDirection:"row"}}>
-                                    <Text>{item.matter}</Text>
-                                    <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end"}}>
-                                        <TouchableHighlight onPress={()=>this.viewEvent(item.evid,item)}>
-                                            <View style={style.btnSesion}>
-                                                <Text style={style.txtSession}>Read more</Text>
-                                            </View>
-                                        </TouchableHighlight>
-                                    </View>
-                                </View>
-                            </View>
-                        
-                    }
-                />
+                <View>
+                    {this.displayImage1(this.state.dataEvent)}
+                    <View style={{flexDirection:"row"}}>
+                        <Text>{this.getData1("heading")}</Text>
+                        {this.getDate()}
+                    </View>
+                    <Text>
+                        {this.getData1("matter")}
+                    </Text>
+                    <TouchableHighlight onPress={()=>this.backEevent()}>
+                        <View style={style.btnSesion}>
+                            <Text style={style.txtSession}>Back</Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
             </View>
         )
     }
@@ -236,4 +232,4 @@ const style=StyleSheet.create({
     }
 });
 
-export default EventsScreen;
+export default EventDetailScreen;

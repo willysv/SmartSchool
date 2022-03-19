@@ -39,6 +39,8 @@ class DashboardScreen extends Component {
         if (res.status=="success") {
             this.setState({data:res.rows});
             await AsyncStorage.setItem("this_sch",res.rows[0].this_sch);
+            await AsyncStorage.setItem("standard",res.rows[0].standard);
+            await AsyncStorage.setItem("section",res.rows[0].section);
         }
         const resGuardian = await Http.instance.post(`${Http.URL}searchguardiannew.php`,form);
         if (res.status=="success") {
@@ -100,8 +102,11 @@ class DashboardScreen extends Component {
 
     doAction(option) {
         switch (option) {
+            case 5:
+                this.props.navigation.navigate('HomeworkStack',{screen:"homeworklistview"});
+                break;
             case 7:
-                this.props.navigation.navigate('EventsStack');
+                this.props.navigation.navigate('EventsStack',{screen:"eventslistview"});
                 break;
         
             default:
@@ -175,10 +180,12 @@ class DashboardScreen extends Component {
                     />
                 </View>
                 <View style={style.listIcons}>
-                  <Image
-                        style={style.iconImage2}
-                        source={require("smartstudent/src/assets/iconhomework.png")}
-                    />
+                    <TouchableHighlight onPress={()=>this.doAction(5)}>
+                        <Image
+                            style={style.iconImage2}
+                            source={require("smartstudent/src/assets/iconhomework.png")}
+                        />
+                    </TouchableHighlight>
                     <Image
                         style={style.iconImage3}
                         source={require("smartstudent/src/assets/iconnews.png")}
