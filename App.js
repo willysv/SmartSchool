@@ -7,6 +7,7 @@ import DashboardStack from 'smartstudent/src/components/dashboard/DashboardStack
 import SchoolViewStack from 'smartstudent/src/components/schoolview/SchoolViewStack';
 import EventsStack from 'smartstudent/src/components/events/EventsStack';
 import HomeworkStack from 'smartstudent/src/components/homework/HomeworkStack';
+import AttendanceStack from 'smartstudent/src/components/attendance/AttendanceStack';
 import ChangePasswordStack from 'smartstudent/src/components/changepass/ChangePasswordStack';
 //import TestScreen from 'smartstudent/src/components/school/Test';
 import { DrawerContent } from 'smartstudent/src/components/drawer/DrawerCustom';
@@ -47,6 +48,10 @@ const App = () => {
         <Drawer.Screen
             options={{headerShown:false}}
             name="HomeworkStack" component={HomeworkStack}
+        />
+        <Drawer.Screen
+            options={{headerShown:false}}
+            name="AttendanceStack" component={AttendanceStack}
         />
       </Drawer.Navigator>
     </NavigationContainer>

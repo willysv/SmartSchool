@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, FlatList, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Http from 'smartstudent/src/libs/http';
@@ -102,6 +102,9 @@ class DashboardScreen extends Component {
 
     doAction(option) {
         switch (option) {
+            case 1:
+                this.props.navigation.navigate('AttendanceStack',{screen:"attendanceview"});
+                break;
             case 5:
                 this.props.navigation.navigate('HomeworkStack',{screen:"homeworklistview"});
                 break;
@@ -162,10 +165,12 @@ class DashboardScreen extends Component {
                 >
                 </MapView>
                 <View style={style.listIcons}>
-                  <Image
-                        style={style.iconImage}
-                        source={require("smartstudent/src/assets/iconattendance.png")}
-                    />
+                    <TouchableHighlight onPress={()=>this.doAction(1)}>
+                        <Image
+                            style={style.iconImage}
+                            source={require("smartstudent/src/assets/iconattendance.png")}
+                        />
+                    </TouchableHighlight>
                     <Image
                         style={style.iconImage1}
                         source={require("smartstudent/src/assets/iconleave.png")}
