@@ -1,30 +1,20 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, TouchableHighlight, Linking, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Calendar, CalendarProps} from 'react-native-calendars';
 import moment from 'moment';
 import Http from 'smartstudent/src/libs/http';
 import { FlatGrid } from "react-native-super-grid";
 
-const INITIAL_DATE = moment().format("YYYY-MM-YY");
-
-class AttendanceScreen extends Component {
+class ProfileScreen extends Component {
 
     state = {
         token:"",
         sid:"",
         data:[],
-        dataAttendace:[],
         this_sch:"",
         standard:"",
         section:"",
-        dataGuardian:[],
-        totalPresent:0,
-        totalAbsent:0,
-        totalLeave:0,
-        totalTardy:0,
-        totalHoliday:0,
-        markerDates:{}
+        dataGuardian:[]
     }
 
     componentDidMount = async () => {
@@ -55,47 +45,9 @@ class AttendanceScreen extends Component {
         formG.append("authtoken",this.state.token);
         formG.append("sid",sid);
         const resGuardian = await Http.instance.post(`${Http.URL}searchguardiannew.php`,formG);
+        console.log(resGuardian);
         if (resGuardian.status=="success") {
             this.setState({dataGuardian:resGuardian.rows});
-        }
-        const resAtt = await Http.instance.post(`${Http.URL}searchattendance.php`,formG);
-        if (resAtt.status=="success") {
-            this.setState({dataAttendace:resAtt.rows});
-            let totalPresent=0;
-            let totalAbsent=0;
-            let totalLeave=0;
-            let totalTardy=0;
-            let totalHoliday=0;
-            let markerDates={};
-            let colorMarker="";
-            resAtt.rows.forEach(item => {
-                switch (item.state) {
-                    case "present":
-                        colorMarker=style.legend1.backgroundColor;
-                        totalPresent++;
-                        break;
-                    case "absent":
-                        colorMarker=style.legend2.backgroundColor;
-                        totalAbsent++;
-                        break;
-                    case "leave":
-                        colorMarker=style.legend3.backgroundColor;
-                        totalLeave++;
-                        break;
-                    case "tardy":
-                        colorMarker=style.legend4.backgroundColor;
-                        totalTardy++;
-                        break;
-                    case "holiday":
-                        colorMarker=style.legend5.backgroundColor;
-                        totalHoliday++;
-                        break;
-                    default:
-                        break;
-                }
-                markerDates[item.date]={selected:true, marked: true, selectedColor: colorMarker};
-            });
-            this.setState({totalAbsent,totalHoliday,totalLeave,totalPresent,totalTardy, markerDates});
         }
     }
 
@@ -167,52 +119,80 @@ class AttendanceScreen extends Component {
         return (
             <View style={style.container}>
                 <View style={style.dataStudent}>
-                    <View>
-                    {
-                    this.displayImage()
-                    }
-                    </View>
-                    <View style={style.dataStudentColumn2}>
+                    <Image
+                            style={style.imgSchool}
+                            source={require("smartstudent/src/assets/schoolprofile.png")}
+                    />
+                    <View style={{position:"absolute", top:0,left:0,width:"100%", height:"100%",justifyContent:"center", alignItems:"center"}}>
+                        {
+                        this.displayImage()
+                        }
                         <Text style={style.full_name}>{this.getData("full_name")}</Text>
-                        <Text style={style.otherData}>Class: {this.getData("standard")}</Text>
-                        <Text style={style.otherData}>Roll No: {this.getData("roll_no")}</Text>
-                        <Text style={style.otherData}>ID: 000</Text>
                     </View>
-                    <View style={style.busContainer}>
+                </View>
+                <View style={style.dataStudentColumn2}>
+                    <View style={style.dataColumn}>
+                        <Text style={style.otherData}>STANDARD</Text>
+                        <Text style={style.otherData1}>{this.getData("standard")}</Text>
+                    </View>
+                    <View style={style.dataColumn}>
+                        <Text style={style.otherData}>SECTION</Text>
+                        <Text style={style.otherData1}>{this.getData("section")}</Text>
+                    </View>
+                    <View style={style.dataColumn}>
+                        <Text style={style.otherData}>HOUSE</Text>
+                        <Text style={style.otherData1}>{this.getData("house")}</Text>
+                    </View>
+                    <View style={style.dataColumn}>
+                        <Text style={style.otherData}>BLOOD GROUP</Text>
+                        <Text style={style.otherData1}>{this.getData("blood")}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection:"row", padding:30, borderBottomColor:"#ccc",borderBottomWidth:0.75}}>
+                    <View style={{width:125}}>
+                        <Text style={{fontWeight:"bold",fontSize:16,color:"#000"}}>Address:</Text>
+                    </View>
+                    <View style={{flexDirection:"row", flex:1}}>
                         <Image
-                            style={style.iconbus}
-                            source={require("smartstudent/src/assets/bus.png")}
+                            
+                            source={require("smartstudent/src/assets/iconhouse.png")}
                         />
+                        <Text style={style.otherData1}>{this.getData("address")}</Text>
                     </View>
                 </View>
-                <Calendar
-                    testID='first_calendar'
-                    enableSwipeMonths
-                    current={INITIAL_DATE}
-                    style={style.calendar}
-                    onDayPress={()=>this.onDayPress}
-                    markedDates={this.state.markerDates}
-                />
-                <View style={style.legends}>
-                    <View style={style.legend1}>
-                        <Text style={style.textLegend}>Present({this.state.totalPresent})</Text>
+                <View style={{flexDirection:"row", padding:30, paddingTop:10, paddingBottom:10, borderBottomColor:"#ccc",borderBottomWidth:0.75}}>
+                    <View style={{width:125}}>
+                        <Text style={{fontWeight:"bold",fontSize:16,color:"#000"}}>Contact:</Text>
                     </View>
-                    <View style={style.legend2}>
-                        <Text style={style.textLegend}>Absent({this.state.totalAbsent})</Text>
-                    </View>
-                    <View style={style.legend3}>
-                        <Text style={style.textLegend}>Leave({this.state.totalLeave})</Text>
+                    <View>
+                        <View style={{flexDirection:"row"}}>
+                            <Image
+                                
+                                source={require("smartstudent/src/assets/iconphone2.png")}
+                            />
+                            <Text style={style.otherData1}>{this.getData("mobile")}</Text>
+                        </View>
+                        <View style={{flexDirection:"row"}}>
+                            <Image
+                                
+                                source={require("smartstudent/src/assets/iconmail2.png")}
+                            />
+                            <Text style={style.otherData1}>{this.getData("email")}</Text>
+                        </View>
                     </View>
                 </View>
-                <View style={style.legends}>
-                    <View style={style.legend4}>
-                        <Text style={{...style.textLegend, color:"#000"}}>Tardy({this.state.totalTardy})</Text>
+                <View style={[style.dataStudentColumn2,{backgroundColor:"#1B6DAD", marginBottom:20, borderRadius:0, borderWidth:0}]}>
+                    <View style={style.dataColumn}>
+                        <Text style={[style.otherData,{color:"#FFF"}]}>ADMISSION NO</Text>
+                        <Text style={[style.otherData1,{color:"#FFF"}]}>{this.getData("admit_class")}</Text>
                     </View>
-                    <View style={style.legend5}>
-                        <Text style={style.textLegend}>Holiday({this.state.totalHoliday})</Text>
+                    <View style={style.dataColumn}>
+                        <Text style={[style.otherData,{color:"#FFF"}]}>ROOL NO</Text>
+                        <Text style={[style.otherData1,{color:"#FFF"}]}>{this.getData("roll_no")}</Text>
                     </View>
-                    <View style={style.legend6}>
-                        <Text></Text>
+                    <View style={style.dataColumn}>
+                        <Text style={[style.otherData,{color:"#FFF"}]}>MODE</Text>
+                        <Text style={[style.otherData1,{color:"#FFF"}]}>XYZ</Text>
                     </View>
                 </View>
                 <View>
@@ -225,6 +205,7 @@ class AttendanceScreen extends Component {
                             <View style={style.listaItem}>
                                 {this.displayImage2(item)}
                                 <Text style={style.tituloText}>{item.g_name}</Text>
+                                <Text style={style.tituloText}>{item.g_mobile}</Text>
                             </View>
                         }
                     />
@@ -238,7 +219,7 @@ const style=StyleSheet.create({
     container: {
         flex:1,
         backgroundColor:"#FFF",
-        padding:20
+        padding:0
     },
     avatar: {
         height: 75,
@@ -246,6 +227,8 @@ const style=StyleSheet.create({
         resizeMode: 'cover',
         alignItems: 'center',
         borderRadius:75,
+        borderColor:"#fff",
+        borderWidth:1.5,
         overflow:"hidden"
     },
     circle: {
@@ -262,15 +245,38 @@ const style=StyleSheet.create({
         marginBottom:10
     },
     dataStudentColumn2: {
-        marginLeft:10
+        paddingLeft:10,
+        paddingRight:10,
+        alignItems:"center",
+        flexDirection:"row",
+        shadowOffset: {
+            width:100,
+            height:-100
+        },
+        shadowRadius:20,
+        shadowOpacity:0.75,
+        shadowColor:"black",
+        backgroundColor:"#FFF",
+        borderRadius:0,
+        borderColor:"#ccc",
+        borderWidth:0.7,
+        height:75
     },
     full_name: {
         fontSize:16,
         fontWeight:"bold",
-        color:"#000"
+        color:"#FFF"
     },
     otherData: {
         fontSize:12,
+        textAlign:"center",
+        color:"#000"
+    },
+    otherData1: {
+        fontSize:14,
+        textAlign:"center",
+        fontWeight:"bold",
+        marginTop:5,
         color:"#000"
     },
     iconbus: {
@@ -342,7 +348,13 @@ const style=StyleSheet.create({
         resizeMode: 'cover',
         alignItems: 'center',
         overflow:"hidden"
+    },
+    imgSchool: {
+        width:"100%"
+    }, 
+    dataColumn: {
+        flex:1
     }
 });
 
-export default AttendanceScreen;
+export default ProfileScreen;

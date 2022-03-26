@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
 import Http from 'smartstudent/src/libs/http';
@@ -32,12 +31,10 @@ class LoginScreen extends Component {
         form.append("password",this.state.pass);
         const res = await Http.instance.post(`${Http.URL}login.php`,form);
         if (res.status=="success") {
-            console.log("respuesta",res);
             await AsyncStorage.setItem("token",res.authtoken);
             await AsyncStorage.setItem("mobile",this.state.user);
             this.props.navigation.navigate('ListStudenStack');
         } else {
-            console.log("respuesta",res);
             alert(res.reason);
         }
     }

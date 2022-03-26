@@ -46,7 +46,6 @@ class HomeworkScreen extends Component {
         formHomework.append("standard",standard);
         formHomework.append("section",section);
         const resHomework = await Http.instance.post(`${Http.URL}searchhomework.php`,formHomework);
-        console.log(resHomework);
         if (resHomework.status=="success") {
             this.setState({dataHomework:resHomework.rows});
         }
@@ -141,7 +140,6 @@ class HomeworkScreen extends Component {
     }
 
     async viewHomework(id,item) {
-        console.log("clic");
         await AsyncStorage.setItem("assid",id);
         this.props.navigation.navigate('HomeworkStack',{screen:"homeworkdetailview",params:{item}});
     }

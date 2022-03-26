@@ -40,7 +40,6 @@ class HomeworkDetailScreen extends Component {
     }
 
     displayImage1(item) {
-        console.log(item.pic1);
         if ((item.pic1!="") && (item.pic1!=null)) {
             return (
                 <View>
@@ -110,7 +109,6 @@ class HomeworkDetailScreen extends Component {
     }
 
     backEevent() {
-        console.log("click");
         this.props.navigation.popToTop();
     }
 
