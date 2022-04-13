@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, TouchableHighlight, Linking, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { launchCamera } from "react-native-image-picker";
 import moment from 'moment';
 import Http from 'smartstudent/src/libs/http';
 import { FlatGrid } from "react-native-super-grid";
@@ -94,24 +95,61 @@ class ProfileScreen extends Component {
 
     }
 
-    displayImage2(item) {
+    async savePhoto(obj,gid,index) {
+        if (typeof(obj.assets)!="undefined") {
+            const {dataGuardian}=this.state;
+            dataGuardian[index].f_pic="";
+            this.setState({isLoading:true,dataGuardian});
+            const form = new FormData();
+            form.append("authtoken",this.state.token);
+            form.append("gid",gid);
+            form.append("scid",this.state.this_sch);
+            form.append("photo",obj.assets[0].base64);
+            //form.append("name",obj.assets[0].fileName);
+            form.append("name",`G${gid}.jpg`);
+            const res = await Http.instance.post(`${Http.URL}savephotosguardianid.php`,form);
+            dataGuardian[index].f_pic=res.photo;
+            this.setState({isLoading:false,dataGuardian});
+        }
+    }
+
+    async takePhoto(id,index) {
+        const options={
+            saveToPhotos:true,
+            mediaType:'photo',
+            includeBase64:true,
+            includeExtra:true,
+            quality:0,
+            maxWidth:480,
+            maxHeight:480
+        };
+        launchCamera(options,(response)=>{this.savePhoto(response,id,index)});
+    }
+
+    displayImage2(item,index) {
         if ((item.f_pic!="") && (item.f_pic!=null)) {
             return (
-                <View>
-                    <Image
-                        source={{uri:`${Http.URL}${item.f_pic}`}}
-                        style={style.avatar}
-                    />
-                    <Image
-                            source={require('smartstudent/src/assets/circle.png')}
-                            style={style.circle}
+                <Pressable onLongPress={()=>this.takePhoto(item.gid,index)}>
+                    <View>
+                        <Image
+                            source={{uri:`${Http.URL}${item.f_pic}`}}
+                            style={style.avatar}
                         />
-                </View>);
+                        <Image
+                                source={require('smartstudent/src/assets/circle.png')}
+                                style={style.circle}
+                            />
+                    </View>
+                </Pressable>);
         } else {
-            return (<Image
-                source={require('smartstudent/src/assets/avatar.png')}
-                style={style.avatar1}
-            />);
+            return (
+            <Pressable onLongPress={()=>this.takePhoto(item.gid,index)}>
+                <Image
+                    source={require('smartstudent/src/assets/avatar.png')}
+                    style={style.avatar1}
+                />
+            </Pressable>
+            );
         }
     }
 
@@ -201,9 +239,9 @@ class ProfileScreen extends Component {
                         data={this.state.dataGuardian}
                         
                         itemContainerStyle={{flex:1,alignItems:"center"}}
-                        renderItem={ ({item})=>
+                        renderItem={ ({item, index})=>
                             <View style={style.listaItem}>
-                                {this.displayImage2(item)}
+                                {this.displayImage2(item,index)}
                                 <Text style={style.tituloText}>{item.g_name}</Text>
                                 <Text style={style.tituloText}>{item.g_mobile}</Text>
                             </View>

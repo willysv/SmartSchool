@@ -22,6 +22,7 @@
     "react-native": "0.67.3",
     "react-native-calendars": "^1.1279.0",
     "react-native-gesture-handler": "^2.3.0",
+    "react-native-image-picker": "^4.7.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "^0.30.1",
     "react-native-paper": "^4.11.2",
