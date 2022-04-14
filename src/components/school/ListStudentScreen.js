@@ -110,7 +110,8 @@ const style=StyleSheet.create({
         alignItems:"center" 
     },
     tituloText: {
-        fontSize:10
+        fontSize:10,
+        color:"#000"
     }
 });
 
