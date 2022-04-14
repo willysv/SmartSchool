@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Pressable, Image, FlatList } from 'react-native';
-import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatGrid } from "react-native-super-grid";
 import Http from 'smartstudent/src/libs/http';
@@ -25,8 +24,6 @@ class ListStudentScreen extends Component {
         form.append("authtoken",this.state.token);
         form.append("mobile",this.state.mobile);
         const res = await Http.instance.post(`${Http.URL}getstudents.php`,form);
-        console.log("Datos:", res);
-        console.log("Toekn:", token);
         if (res.status=="success") {
             this.setState({data:res.rows});
         }

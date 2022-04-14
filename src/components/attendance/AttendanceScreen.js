@@ -93,7 +93,7 @@ class AttendanceScreen extends Component {
                     default:
                         break;
                 }
-                markerDates[item.date]={marked: true, selectedColor: colorMarker};
+                markerDates[item.date]={selected:true, marked: true, selectedColor: colorMarker};
             });
             this.setState({totalAbsent,totalHoliday,totalLeave,totalPresent,totalTardy, markerDates});
         }

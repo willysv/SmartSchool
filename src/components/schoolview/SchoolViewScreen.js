@@ -25,14 +25,11 @@ class SchoolViewScreen extends Component {
         if (token==null) {
             this.props.navigation.navigate('LoginStack');
         }
-        console.log("Toekn:", token);
-        console.log("SID:", sid);
         this.setState({token,sid});
         const form = new FormData();
         form.append("authtoken",this.state.token);
         //form.append("sid",this.state.sid);
         const res = await Http.instance.post(`${Http.URL}searchschool.php`,form);
-        console.log("Datos:", res);
         if (res.status=="success") {
             this.setState({data:res.rows,latitud:parseFloat(res.rows[0].s_lat),longitud:parseFloat(res.rows[0].s_lon)});
         }

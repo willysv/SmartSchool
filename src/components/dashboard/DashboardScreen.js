@@ -34,8 +34,6 @@ class DashboardScreen extends Component {
         form.append("authtoken",this.state.token);
         form.append("sid",this.state.sid);
         const res = await Http.instance.post(`${Http.URL}getstudents.php`,form);
-        console.log("Datos:", res.rows);
-        console.log("Toekn:", token);
         if (res.status=="success") {
             this.setState({data:res.rows});
             await AsyncStorage.setItem("this_sch",res.rows[0].this_sch);
