@@ -225,12 +225,12 @@ class ProfileScreen extends Component {
                         <Text style={[style.otherData1,{color:"#FFF"}]}>{this.getData("admit_class")}</Text>
                     </View>
                     <View style={style.dataColumn}>
-                        <Text style={[style.otherData,{color:"#FFF"}]}>ROOL NO</Text>
+                        <Text style={[style.otherData,{color:"#FFF"}]}>ROLL NO</Text>
                         <Text style={[style.otherData1,{color:"#FFF"}]}>{this.getData("roll_no")}</Text>
                     </View>
                     <View style={style.dataColumn}>
                         <Text style={[style.otherData,{color:"#FFF"}]}>MODE</Text>
-                        <Text style={[style.otherData1,{color:"#FFF"}]}>XYZ</Text>
+                        <Text style={[style.otherData1,{color:"#FFF"}]}>WALK</Text>
                     </View>
                 </View>
                 <View>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableHighlight, View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ChangePasswordScreen from 'smartstudent/src/components/changepass/ChangePasswordScreen';
 import NavigationDrawerStructure from 'smartstudent/src/components/drawer/NavigationDrawerStructure';
@@ -18,6 +19,13 @@ const ChangePasswordStack = ({navigation}) => {
                         <NavigationDrawerStructure
                             navigationProps={navigation}
                         />,
+                        headerRight: () => (
+                            <TouchableHighlight onPress={()=>{navigation.navigate('DashboardStack',{screen:"dashboardscreenview"});}}>
+                                <View style={{backgroundColor:"#1B4085",marginRight:10}}>
+                                    <Text style={{color:"#FFF"}}>BACK</Text>
+                                </View>
+                            </TouchableHighlight>
+                          ),
                         headerStyle: {
                         backgroundColor: '#1B4085', //Set Header color
                         },

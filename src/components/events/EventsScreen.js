@@ -102,7 +102,7 @@ class EventsScreen extends Component {
         const dateToFormat = moment(item.datetime).format("MM-DD-YYYY hh:mm");
         return (
             <View style={{flex:1, flexDirection:"row",justifyContent:"flex-end"}}>
-            <Text>
+            <Text style={style.titleEvent}>
                 {dateToFormat}
             </Text>
             </View>
@@ -143,11 +143,11 @@ class EventsScreen extends Component {
                             <View style={{marginBottom:10}}>
                                 {this.displayImage1(item)}
                                 <View style={{flexDirection:"row"}}>
-                                    <Text>{item.heading}</Text>
+                                    <Text style={style.titleEvent}>{item.heading}</Text>
                                     {this.getDate(item)}
                                 </View>
                                 <View style={{flexDirection:"row"}}>
-                                    <Text>{item.matter}</Text>
+                                    <Text style={style.titleEvent}>{item.matter}</Text>
                                     <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end"}}>
                                         <TouchableHighlight onPress={()=>this.viewEvent(item.evid,item)}>
                                             <View style={style.btnSesion}>
@@ -233,6 +233,9 @@ const style=StyleSheet.create({
         color:"#fff",
         fontSize:12,
         fontWeight:"bold"
+    },
+    titleEvent: {
+        color:"#000"
     }
 });
 

@@ -39,20 +39,17 @@ class EventDetailScreen extends Component {
         this.setState({dataEvent:this.props.route.params.item});
     }
 
-    displayImage1(item) {
-        if ((item.pic1!="") && (item.pic1!=null)) {
+    displayImage1(item,pic) {
+        if ((item[pic]!="") && (item[pic]!=null)) {
             return (
                 <View>
                     <Image
-                        source={{uri:`${Http.URL}${item.pic1}`}}
+                        source={{uri:`${Http.URL}${item[pic]}`}}
                         style={style.imgEvent}
                     />
                 </View>);
         } else {
-            return (<Image
-                source={require('smartstudent/src/assets/noimage.jpg')}
-                style={style.imgEvent}
-            />);
+            return;
         }
     }
 
@@ -105,7 +102,7 @@ class EventDetailScreen extends Component {
             const dateToFormat = moment(item.datetime).format("MM-DD-YYYY hh:mm");
             return (
                 <View style={{flex:1, flexDirection:"row",justifyContent:"flex-end"}}>
-                    <Text>
+                    <Text style={style.titleEvent}>
                         {dateToFormat}
                     </Text>
                 </View>
@@ -140,12 +137,14 @@ class EventDetailScreen extends Component {
                     </View>
                 </View>
                 <View>
-                    {this.displayImage1(this.state.dataEvent)}
+                    {this.displayImage1(this.state.dataEvent,"pic1")}
+                    {this.displayImage1(this.state.dataEvent,"pic2")}
+                    {this.displayImage1(this.state.dataEvent,"pic3")}
                     <View style={{flexDirection:"row"}}>
-                        <Text>{this.getData1("heading")}</Text>
+                        <Text style={style.titleEvent}>{this.getData1("heading")}</Text>
                         {this.getDate()}
                     </View>
-                    <Text>
+                    <Text style={style.titleEvent}>
                         {this.getData1("matter")}
                     </Text>
                     <TouchableHighlight onPress={()=>this.backEevent()}>
@@ -227,6 +226,9 @@ const style=StyleSheet.create({
         color:"#fff",
         fontSize:12,
         fontWeight:"bold"
+    },
+    titleEvent: {
+        color:"#000"
     }
 });
 

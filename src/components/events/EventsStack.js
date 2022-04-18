@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableHighlight, View, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import EventsScreen from 'smartstudent/src/components/events/EventsScreen';
 import EventDetailScreen from 'smartstudent/src/components/events/EventDetailScreen';
@@ -19,6 +20,13 @@ const EventsStack = ({navigation}) => {
                         <NavigationDrawerStructure
                             navigationProps={navigation}
                         />,
+                        headerRight: () => (
+                            <TouchableHighlight onPress={()=>{navigation.navigate('DashboardStack',{screen:"dashboardscreenview"});}}>
+                                <View style={{backgroundColor:"#1B4085",marginRight:10}}>
+                                    <Text style={{color:"#FFF"}}>BACK</Text>
+                                </View>
+                            </TouchableHighlight>
+                          ),
                         headerStyle: {
                         backgroundColor: '#1B4085', //Set Header color
                         },
@@ -39,6 +47,13 @@ const EventsStack = ({navigation}) => {
                         <NavigationDrawerStructure
                             navigationProps={navigation}
                         />,
+                        headerRight: () => (
+                            <TouchableHighlight onPress={()=>{navigation.navigate('DashboardStack',{screen:"dashboardscreenview"});}}>
+                                <View style={{backgroundColor:"#1B4085",marginRight:10}}>
+                                    <Text style={{color:"#FFF"}}>BACK</Text>
+                                </View>
+                            </TouchableHighlight>
+                          ),
                         headerStyle: {
                         backgroundColor: '#1B4085', //Set Header color
                         },
@@ -53,5 +68,6 @@ const EventsStack = ({navigation}) => {
         </Stack.Navigator>
     );
 }
+
 
 export default EventsStack;

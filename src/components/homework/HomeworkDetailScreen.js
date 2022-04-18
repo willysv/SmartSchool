@@ -102,8 +102,9 @@ class HomeworkDetailScreen extends Component {
     getDate(item,title) {
         const dateToFormat = moment(item).format("MM-DD-YYYY hh:mm");
         return (
-            <View>
-                <Text>{title}{dateToFormat}</Text>
+            <View style={{flexDirection:"row"}}>
+                <Text style={{color:"#000",fontWeight:"bold"}}>{title}</Text>
+                <Text style={{color:"#000"}}>{dateToFormat}</Text>
             </View>
         );
     }
@@ -164,10 +165,16 @@ class HomeworkDetailScreen extends Component {
                     <View style={{flexDirection:"row"}}>
                         {this.getDate(this.getData1("given_on"),"Given on:")}
                     </View>
-                    <Text>{item.assignment}</Text>
-                    <Text>Given by: {this.getData1("given_by")}</Text>
-                    <Text>Subject: {this.getData1("subject")}</Text>
-                    <Text>{this.getData1("assignment")}</Text>
+                    <Text style={style.titleHomework}>{item.assignment}</Text>
+                    <View style={{flexDirection:"row"}}>
+                        <Text style={[style.titleHomework,{fontWeight:"bold"}]}>Given by:</Text>
+                        <Text style={style.titleHomework}> {item.given_by}</Text>
+                    </View>
+                    <View style={{flexDirection:"row"}}>
+                        <Text style={[style.titleHomework,{fontWeight:"bold"}]}>Subject:</Text>
+                        <Text style={style.titleHomework}>{item.subject}</Text>
+                    </View>
+                    <Text style={style.titleHomework}>{this.getData1("assignment")}</Text>
                     {this.getDate(this.getData1("submission_dt"),"Submission date:")}
                     <Text>{this.getData1("note")}</Text>
                     <View style={{flexDirection:"row"}}>
@@ -262,6 +269,9 @@ const style=StyleSheet.create({
     attach: {
         width:45,
         height:45
+    },
+    titleHomework: {
+        color:"#000"
     }
 });
 

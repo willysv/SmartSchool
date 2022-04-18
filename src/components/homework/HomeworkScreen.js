@@ -133,8 +133,9 @@ class HomeworkScreen extends Component {
     getDate(item,title) {
         const dateToFormat = moment(item).format("MM-DD-YYYY hh:mm");
         return (
-            <View>
-                <Text>{title}{dateToFormat}</Text>
+            <View style={{flexDirection:"row"}}>
+                <Text style={{color:"#000",fontWeight:"bold"}}>{title}</Text>
+                <Text style={{color:"#000"}}>{dateToFormat}</Text>
             </View>
         );
     }
@@ -171,13 +172,19 @@ class HomeworkScreen extends Component {
                     renderItem = {
                         ({item}) => 
                             <View style={{marginBottom:10}}>
-                                <View style={{flexDirection:"row"}}>
+                                <View style={{flexDirection:"row",color:"#000"}}>
                                     {this.getDate(item.given_on,"Given on:")}
                                 </View>
-                                <Text>{item.assignment}</Text>
-                                <Text>Given by: {item.given_by}</Text>
-                                <Text>Subject: {item.subject}</Text>
-                                <Text>{item.assignment}</Text>
+                                <Text style={style.titleHomework}>{item.assignment}</Text>
+                                <View style={{flexDirection:"row"}}>
+                                    <Text style={[style.titleHomework,{fontWeight:"bold"}]}>Given by:</Text>
+                                    <Text style={style.titleHomework}> {item.given_by}</Text>
+                                </View>
+                                <View style={{flexDirection:"row"}}>
+                                    <Text style={[style.titleHomework,{fontWeight:"bold"}]}>Subject:</Text>
+                                    <Text style={style.titleHomework}>{item.subject}</Text>
+                                </View>
+                                <Text style={style.titleHomework}>{item.assignment}</Text>
                                 {this.getDate(item.submission_dt,"Submission date:")}
                                 <View style={{flexDirection:"row"}}>
                                     {this.getAttach(item,"attach1")}
@@ -206,7 +213,8 @@ const style=StyleSheet.create({
     container: {
         flex:1,
         backgroundColor:"#FFF",
-        padding:20
+        padding:20,
+        color:"#000"        
     },
     avatar: {
         height: 75,
@@ -274,6 +282,9 @@ const style=StyleSheet.create({
     attach: {
         width:45,
         height:45
+    },
+    titleHomework: {
+        color:"#000"
     }
 });
 
