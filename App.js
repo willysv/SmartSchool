@@ -8,6 +8,7 @@ import SchoolViewStack from 'smartstudent/src/components/schoolview/SchoolViewSt
 import EventsStack from 'smartstudent/src/components/events/EventsStack';
 import HomeworkStack from 'smartstudent/src/components/homework/HomeworkStack';
 import AttendanceStack from 'smartstudent/src/components/attendance/AttendanceStack';
+import TimeTableStack from 'smartstudent/src/components/timetable/TimeTableStack';
 import ProfileStack from 'smartstudent/src/components/profile/ProfileStack';
 import ChangePasswordStack from 'smartstudent/src/components/changepass/ChangePasswordStack';
 //import TestScreen from 'smartstudent/src/components/school/Test';
@@ -57,6 +58,10 @@ const App = () => {
         <Drawer.Screen
             options={{headerShown:false}}
             name="ProfileStack" component={ProfileStack}
+        />
+        <Drawer.Screen
+            options={{headerShown:false}}
+            name="TimeTableStack" component={TimeTableStack}
         />
       </Drawer.Navigator>
     </NavigationContainer>
