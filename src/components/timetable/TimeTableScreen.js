@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, TextInput, TouchableHighlight, FlatList, ActivityIndicator} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Http from 'smartteacher/src/libs/http';
+import Http from 'smartstudent/src/libs/http';
 //import { Button } from "react-native-paper";
 
 class TimeTableScreen extends Component {
@@ -107,7 +107,7 @@ class TimeTableScreen extends Component {
                     }}>
                         <Image
                             style={[style.calendar,{marginLeft:15}]}
-                            source={require("smartteacher/src/assets/check.png")}
+                            source={require("smartstudent/src/assets/check.png")}
                         />
                     </TouchableHighlight>
                 </View>
