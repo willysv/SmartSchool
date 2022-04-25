@@ -103,6 +103,9 @@ class DashboardScreen extends Component {
             case 1:
                 this.props.navigation.navigate('AttendanceStack',{screen:"attendanceview"});
                 break;
+            case 2:
+                this.props.navigation.navigate('HolidaysStack',{screen:"holidayview"});
+                break;
             case 5:
                 this.props.navigation.navigate('HomeworkStack',{screen:"homeworklistview"});
                 break;
@@ -176,10 +179,12 @@ class DashboardScreen extends Component {
                         style={style.iconImage1}
                         source={require("smartstudent/src/assets/iconleave.png")}
                     />
-                    <Image
-                        style={style.iconImage1}
-                        source={require("smartstudent/src/assets/iconholidays.png")}
-                    />
+                    <TouchableHighlight onPress={()=>this.doAction(2)}>
+                        <Image
+                            style={style.iconImage1}
+                            source={require("smartstudent/src/assets/iconholidays.png")}
+                        />
+                    </TouchableHighlight>
                     <Image
                         style={style.iconImage1}
                         source={require("smartstudent/src/assets/iconmessage.png")}
