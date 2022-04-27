@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, TextInput, TouchableHighlight, FlatList, ActivityIndicator} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Http from 'smartstudent/src/libs/http';
 //import { Button } from "react-native-paper";
@@ -11,7 +10,7 @@ class HolidaysScreen extends Component {
         isLoading:false,
         token:"",
         mobile:"",
-        scid:0,
+        this_sch:0,
         sid:"",
         data:[]
     }
@@ -19,38 +18,60 @@ class HolidaysScreen extends Component {
     componentDidMount = async () => {
         const token = await AsyncStorage.getItem("token");
         const sid = await AsyncStorage.getItem("sid");
+        const this_sch = await AsyncStorage.getItem("this_sch");
         //await AsyncStorage.removeItem("token");
         if (token==null) {
             this.props.navigation.navigate('LoginStack');
         }
-        this.setState({token,sid});
-    }
-
-    async getData() {
-        if (this.state.selectedValue=="Day") {
-            alert("You must select the day");
-            return;
-        }
+        this.setState({token,sid,this_sch});
         const form = new FormData();
         form.append("authtoken",this.state.token);
-        form.append("day",this.state.selectedValue);
-        form.append("sid",this.state.sid);
-        const res = await Http.instance.post(`${Http.URL}getTimetable.php`,form);
+        form.append("scid",this.state.this_sch);
+        const res = await Http.instance.post(`${Http.URL}getHoliday.php`,form);
         if (res.status=="success") {
             this.setState({data:res.rows});
         }
-        console.log(res);
+    }
+
+    displayImage(item) {
+        if (item.picture!="") {
+            return (
+                <View>
+                    <Image
+                        source={{uri:`${Http.URL}${item.picture}`}}
+                        style={style.avatar}
+                    />
+                </View>);
+        } else {
+            return (<Image
+                source={require('smartstudent/src/assets/avatar.png')}
+                style={style.avatar}
+            />);
+        }
     }
 
     constructor(props) {
         super(props);
     }
 
-    renderDay() {
-        const itemPicker=this.state.dataDay.map((item,index)=>{
-            return (<Picker.Item key={index} label={item.text} value={item.value} />);
-        });
-        return itemPicker;
+    getColor(index) {
+        const value=index%6;
+        switch (value) {
+            case 0:
+                return "#FFE3FD";
+            case 1:
+                return "#FFF9E3";
+            case 2:
+                return "#F2FDFF";
+            case 3:
+                return "#EDFFF0";
+            case 4:
+                return "#FDF5FF";
+            case 5:
+                return "#FFF9F7";
+            default:
+                break;
+        }
     }
 
     render() {
@@ -60,37 +81,18 @@ class HolidaysScreen extends Component {
                  alignSelf:"center",
                  top:200
                 }}/>
-                <View style={style.filter}>
-                    <Picker
-                        selectedValue={this.state.selectedValue}
-                        style={{ height: 50, flex:1, color:"#000"}}
-                        dropdownIconColor="#000"
-                        onValueChange={(itemValue, itemIndex) => {
-                            this.setState({selectedValue:itemValue});
-                        }}
-                    >
-                        {this.renderDay()}
-                    </Picker>
-                    <TouchableHighlight onPress={()=>{
-                            this.getData();
-                    }}>
-                        <Image
-                            style={[style.calendar,{marginLeft:15}]}
-                            source={require("smartstudent/src/assets/check.png")}
-                        />
-                    </TouchableHighlight>
-                </View>
                 <View style={{padding:20}}>
                     <FlatList 
                         data={this.state.data}
-                        renderItem= { ({item}) => 
-                            <View style={{marginBottom:15, borderWidth:0.75, borderColor:"#ccc", padding:5, shadowColor:"#000", shadowOffset: {width:0, height:1}, shadowOpacity:0.20, shadowRadius:1.41,elevation:2}}>
-                                <Text style={{fontSize:24,fontWeight:"bold",color:"#FFACC7"}}>{item.subject}</Text>
-                                <Text style={{fontSize:24,fontWeight:"bold",color:"#000"}}>{item.type}</Text>
-                                <Text style={{fontSize:18,fontWeight:"bold",color:"#798ebb"}}>{item.name}</Text>
-                                <Text style={{fontSize:18,fontWeight:"bold",color:"#000"}}>{item.period}</Text>
-                                <Text style={{fontSize:18,fontWeight:"bold",color:"#000"}}>Class: {item.class}</Text>
-                                <Text style={{fontSize:18,fontWeight:"bold",color:"#000"}}>Section: {item.section}</Text>
+                        renderItem= { ({item,index}) => 
+                            <View style={{marginBottom:15, borderWidth:0.75, borderColor:"#ccc", padding:10,flexDirection:"row",borderRadius:20,backgroundColor:this.getColor(index)}}>
+                                <View>
+                                    <Text style={{fontSize:18,fontWeight:"bold",color:"#FFACC7"}}>{item.holiday}</Text>
+                                    <Text style={{fontSize:18,fontWeight:"bold",color:"#000"}}>{item.dateHoliday}</Text>
+                                </View>
+                                <View style={{marginLeft:"auto"}}>
+                                    {this.displayImage(item)}
+                                </View>
                             </View>
                         }
                     />
@@ -115,6 +117,14 @@ const style=StyleSheet.create({
         height:30,
         marginTop:10,
         resizeMode: 'stretch'
+    },
+    avatar: {
+        height: 75,
+        width: 75,
+        resizeMode: 'cover',
+        alignItems: 'center',
+        borderRadius:75,
+        overflow:"hidden"
     }
 });
 
