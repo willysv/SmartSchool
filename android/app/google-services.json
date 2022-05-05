@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "31516431022",
+    "project_id": "askool-c5384",
+    "storage_bucket": "askool-c5384.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31516431022:android:df0d10d18ecd541d8c533f",
+        "android_client_info": {
+          "package_name": "com.askool.student"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31516431022-g4d3ktd55odi9oakosskoeupv1eq1itd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEuCB4kdORoE-jVqi5_6ejYB1ceHRFTm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31516431022-g4d3ktd55odi9oakosskoeupv1eq1itd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

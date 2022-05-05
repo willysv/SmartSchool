@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import SchoolStack from 'smartstudent/src/components/school/SchoolStack';
@@ -14,8 +14,19 @@ import ProfileStack from 'smartstudent/src/components/profile/ProfileStack';
 import ChangePasswordStack from 'smartstudent/src/components/changepass/ChangePasswordStack';
 //import TestScreen from 'smartstudent/src/components/school/Test';
 import { DrawerContent } from 'smartstudent/src/components/drawer/DrawerCustom';
+import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 const Drawer = createDrawerNavigator();
 const App = () => {
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      console.log(JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <NavigationContainer>
       <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}

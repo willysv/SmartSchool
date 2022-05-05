@@ -1,4 +1,4 @@
-package com.smartstudent;
+package com.askool.student;
 
 import com.facebook.react.ReactActivity;
 
