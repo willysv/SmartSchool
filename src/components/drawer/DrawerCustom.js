@@ -4,6 +4,7 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
+import Http from 'smartstudent/src/libs/http';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
@@ -24,6 +25,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export function DrawerContent(props) {
 
     closeSesion = async () => {
+        const token = await AsyncStorage.getItem("token");
+        const form = new FormData();
+        form.append("authtoken",token);
+        const res = await Http.instance.post(`${Http.URL}closesession.php`, form);
         await AsyncStorage.removeItem("token");
         props.navigation.navigate('LoginStack');
     }

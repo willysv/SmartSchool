@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, Tex
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
+import messaging from '@react-native-firebase/messaging';
 import Http from 'smartstudent/src/libs/http';
 
 class LoginScreen extends Component {
@@ -18,6 +19,22 @@ class LoginScreen extends Component {
         if (token !==null) {
             this.props.navigation.navigate('ListStudenStack');
         }
+        this.checkNotificationPermission();
+    }
+
+    async checkNotificationPermission() {
+        const enabled = await messaging().hasPermission();
+        if (enabled) {
+            console.log("has permision ");
+        } else {
+            this.requestPermission();
+        }
+    }
+
+    async requestPermission() {
+        try {
+            await messaging().requestPermission();
+        } catch (error) {}
     }
 
     constructor(props) {
@@ -26,16 +43,19 @@ class LoginScreen extends Component {
     }
 
     login = async () => {
+        const fcmtoken= await messaging().getToken();
+        console.log(fcmtoken);
         const form = new FormData();
         form.append("login",this.state.user);
         form.append("password",this.state.pass);
+        form.append("fcmtoken",fcmtoken);
         const res = await Http.instance.post(`${Http.URL}login.php`,form);
-        if (res.status=="success") {
+        if ((res.status=="success") && (res.level==4)) {
             await AsyncStorage.setItem("token",res.authtoken);
             await AsyncStorage.setItem("mobile",this.state.user);
             this.props.navigation.navigate('ListStudenStack');
         } else {
-            alert(res.reason);
+            alert("Either user not exist or incorrect password");
         }
     }
 

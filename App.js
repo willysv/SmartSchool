@@ -17,15 +17,15 @@ import { DrawerContent } from 'smartstudent/src/components/drawer/DrawerCustom';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Message handled in the background!', remoteMessage);
+  //console.log('Message handled in the background!', remoteMessage);
   Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
 });
 const Drawer = createDrawerNavigator();
 const App = () => {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      console.log(JSON.stringify(remoteMessage));
+      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+      //console.log(JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
