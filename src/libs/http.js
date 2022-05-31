@@ -1,7 +1,7 @@
 class Http {
     
     static instance = new Http();
-    static URL = "http://81.171.6.88/web/api/";
+    static URL = "http://askool.in/api/";
 
     get = async (url) => {
         try {
