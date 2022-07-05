@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, Tex
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
-import messaging from '@react-native-firebase/messaging';
+//import messaging from '@react-native-firebase/messaging';
 import Http from 'smartstudent/src/libs/http';
 
 class LoginScreen extends Component {
@@ -19,7 +19,7 @@ class LoginScreen extends Component {
         if (token !==null) {
             this.props.navigation.navigate('ListStudenStack');
         }
-        this.checkNotificationPermission();
+        //this.checkNotificationPermission();
     }
 
     async checkNotificationPermission() {
@@ -43,7 +43,8 @@ class LoginScreen extends Component {
     }
 
     login = async () => {
-        const fcmtoken= await messaging().getToken();
+        //const fcmtoken= await messaging().getToken();
+        const fcmtoken="";
         console.log(fcmtoken);
         const form = new FormData();
         form.append("login",this.state.user);
