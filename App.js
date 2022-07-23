@@ -14,18 +14,31 @@ import ProfileStack from 'smartstudent/src/components/profile/ProfileStack';
 import ChangePasswordStack from 'smartstudent/src/components/changepass/ChangePasswordStack';
 //import TestScreen from 'smartstudent/src/components/school/Test';
 import { DrawerContent } from 'smartstudent/src/components/drawer/DrawerCustom';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-  //console.log('Message handled in the background!', remoteMessage);
-  Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
-});
+import firebase from '@react-native-firebase/app';
 const Drawer = createDrawerNavigator();
 const App = () => {
   useEffect(() => {
+    if (    
+      Platform.OS === 'ios' &&
+      !messaging().isDeviceRegisteredForRemoteMessages
+    ) {
+      const reactNativeFirebaseConfig = {
+        clientId: '31516431022-u06s7stpdr470r2j2v7cr9jn4c9j5isg.apps.googleusercontent.com',
+        apiKey: "AIzaSyBADjJvu8kbS_qYktoxbg9sHhztTnltvKk",
+        projectId: "askool-c5384",
+        databaseURL: '',
+        messagingSenderId:"31516431022",
+        storageBucket: '',
+        appId: "1:31516431022:ios:e33e82191f52720d8c533f",
+      };
+      firebase.initializeApp(reactNativeFirebaseConfig);
+      console.log("Registrado appjs");
+    }
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
-      //console.log(JSON.stringify(remoteMessage));
+      console.log(JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;

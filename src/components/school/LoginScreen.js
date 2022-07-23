@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, TextInput } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight, ImageBackground, Image, TextInput, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
 import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 import Http from 'smartstudent/src/libs/http';
 
 class LoginScreen extends Component {
@@ -23,9 +24,25 @@ class LoginScreen extends Component {
     }
 
     async checkNotificationPermission() {
+        const authorizationStatus = await messaging().requestPermission();
+        if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED) {
+            console.log('User has notification permissions enabled.');
+        } else if (authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
+            console.log('User has provisional notification permissions.');
+        } else {
+            console.log('User has notification permissions disabled');
+        }
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+            console.log('Message handled in the background!', remoteMessage);
+            alert("Mensaje");
+            Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+          });
+        await messaging().sendMessage("Test");
+        console.log("Mensaje Enviado desde la app");
+        return;
         const enabled = await messaging().hasPermission();
         if (enabled) {
-            console.log("has permision ");
+            console.log("has permision nofificacion ");
         } else {
             this.requestPermission();
         }
@@ -43,7 +60,25 @@ class LoginScreen extends Component {
     }
 
     login = async () => {
+        if (    
+        Platform.OS === 'ios' &&
+        !messaging().isDeviceRegisteredForRemoteMessages
+      ) {
+        const reactNativeFirebaseConfig = {
+            clientId: '31516431022-u06s7stpdr470r2j2v7cr9jn4c9j5isg.apps.googleusercontent.com',
+            apiKey: "AIzaSyBADjJvu8kbS_qYktoxbg9sHhztTnltvKk",
+            projectId: "askool-c5384",
+            databaseURL: '',
+            messagingSenderId:"31516431022",
+            storageBucket: '',
+            appId: "1:31516431022:ios:e33e82191f52720d8c533f",
+        };
+        firebase.initializeApp(reactNativeFirebaseConfig);
+            console.log('myMethod: ', 'registerDeviceForRemoteMessages')
+            await messaging().registerDeviceForRemoteMessages()
+          }
         const fcmtoken= await messaging().getToken();
+        console.log("Token*********************************",fcmtoken);
         //const fcmtoken="";
         console.log(fcmtoken);
         const form = new FormData();

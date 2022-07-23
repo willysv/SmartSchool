@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, TextInput, TouchableHighlight, FlatList, ActivityIndicator, Modal} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableHighlight, FlatList, ActivityIndicator, Platform, Modal} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Http from 'smartstudent/src/libs/http';

@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5EBBD0A828775A3700CBC6C7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EBBD0A728775A3700CBC6C7 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		985C6E0F68ED4228F3B48272 /* libPods-SmartStudent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F4001D0F996C12CD2AEAD0 /* libPods-SmartStudent.a */; };
 		C2DBE8C3733F6B2C7EC565F1 /* libPods-SmartStudent-SmartStudentTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FB0A4A6E3515E6FAAC4447F /* libPods-SmartStudent-SmartStudentTests.a */; };
@@ -39,6 +40,7 @@
 		2ACD2EA4DE4862C56A912166 /* Pods-SmartStudent-SmartStudentTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartStudent-SmartStudentTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartStudent-SmartStudentTests/Pods-SmartStudent-SmartStudentTests.debug.xcconfig"; sourceTree = "<group>"; };
 		33B1FDC0795A52A537D8C9B6 /* Pods-SmartStudent-SmartStudentTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartStudent-SmartStudentTests.release.xcconfig"; path = "Target Support Files/Pods-SmartStudent-SmartStudentTests/Pods-SmartStudent-SmartStudentTests.release.xcconfig"; sourceTree = "<group>"; };
 		5E1D5F4B284C0EB700BE0CB4 /* SmartStudent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SmartStudent.entitlements; path = SmartStudent/SmartStudent.entitlements; sourceTree = "<group>"; };
+		5EBBD0A728775A3700CBC6C7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6FB0A4A6E3515E6FAAC4447F /* libPods-SmartStudent-SmartStudentTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartStudent-SmartStudentTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		724EC58923FC53741120248B /* Pods-SmartStudent.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartStudent.release.xcconfig"; path = "Target Support Files/Pods-SmartStudent/Pods-SmartStudent.release.xcconfig"; sourceTree = "<group>"; };
 		79A78A9D164A3045C933563C /* Pods-SmartStudent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartStudent.debug.xcconfig"; path = "Target Support Files/Pods-SmartStudent/Pods-SmartStudent.debug.xcconfig"; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 		13B07FAE1A68108700A75B9A /* SmartStudent */ = {
 			isa = PBXGroup;
 			children = (
+				5EBBD0A728775A3700CBC6C7 /* GoogleService-Info.plist */,
 				5E1D5F4B284C0EB700BE0CB4 /* SmartStudent.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -247,6 +250,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				5EBBD0A828775A3700CBC6C7 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +451,8 @@
 			baseConfigurationReference = 2ACD2EA4DE4862C56A912166 /* Pods-SmartStudent-SmartStudentTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 9VX6698G3H;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -474,7 +480,9 @@
 			baseConfigurationReference = 33B1FDC0795A52A537D8C9B6 /* Pods-SmartStudent-SmartStudentTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 9VX6698G3H;
 				INFOPLIST_FILE = SmartStudentTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -514,7 +522,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.askool.student;
 				PRODUCT_NAME = SmartStudent;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -542,7 +550,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.askool.student;
 				PRODUCT_NAME = SmartStudent;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
