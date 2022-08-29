@@ -52,7 +52,7 @@ export function DrawerContent(props) {
                             <Pressable onPress={()=>props.navigation.navigate('Home')}>
                             <Image 
                                 style={styles.imgMenu}
-                                source={require("smartstudent/src/assets/logomenu.png")}
+                                source={require("smartstudent/src/assets/logomenuiskool.png")}
                             />
                             </Pressable>
                         </View>

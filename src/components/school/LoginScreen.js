@@ -108,7 +108,7 @@ class LoginScreen extends Component {
                      <View style={style.logoContainer}>
                         <Image
                             style={style.logo}
-                            source={require('smartstudent/src/assets/logo.png')}
+                            source={require('smartstudent/src/assets/logoiskool.png')}
                         />
                     </View>
                     <View style={style.groupData}>

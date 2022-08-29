@@ -23,8 +23,7 @@ class Http {
             let json=await req.json();
             return json;
         } catch (error) {
-            alert(error);
-            console.log("Error en el http post",error);
+            console.log("Error en el http post",error,url,body);
             throw Error(error);
         }
     }

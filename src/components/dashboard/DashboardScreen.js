@@ -106,6 +106,12 @@ class DashboardScreen extends Component {
             case 2:
                 this.props.navigation.navigate('HolidaysStack',{screen:"holidayview"});
                 break;
+            case 3:
+                this.props.navigation.navigate('LeaveStack',{screen:"leaveview"});
+                break;
+            case 4:
+                this.props.navigation.navigate('MessageStack',{screen:"messageview"});
+                break;
             case 5:
                 this.props.navigation.navigate('HomeworkStack',{screen:"homeworklistview"});
                 break;
@@ -175,20 +181,24 @@ class DashboardScreen extends Component {
                             source={require("smartstudent/src/assets/iconattendance.png")}
                         />
                     </TouchableHighlight>
-                    <Image
-                        style={style.iconImage1}
-                        source={require("smartstudent/src/assets/iconleave.png")}
-                    />
+                    <TouchableHighlight onPress={()=>this.doAction(3)}>
+                        <Image
+                            style={style.iconImage1}
+                            source={require("smartstudent/src/assets/iconleave.png")}
+                        />
+                    </TouchableHighlight>
                     <TouchableHighlight onPress={()=>this.doAction(2)}>
                         <Image
                             style={style.iconImage1}
                             source={require("smartstudent/src/assets/iconholidays.png")}
                         />
                     </TouchableHighlight>
-                    <Image
-                        style={style.iconImage1}
-                        source={require("smartstudent/src/assets/iconmessage.png")}
-                    />
+                    <TouchableHighlight onPress={()=>this.doAction(4)}>
+                        <Image
+                            style={style.iconImage1}
+                            source={require("smartstudent/src/assets/iconmessage.png")}
+                        />
+                    </TouchableHighlight>
                 </View>
                 <View style={style.listIcons}>
                     <TouchableHighlight onPress={()=>this.doAction(5)}>
